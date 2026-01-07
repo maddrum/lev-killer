@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Колко лева остават? </title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<!-- Vendors-->
+	<link rel="stylesheet" type="text/css" href="assets/vendors/bootstrap/grid.css">
+	<!-- App & fonts-->
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Work+Sans:300,400,500,700">
+	<link rel="stylesheet" type="text/css" id="app-stylesheet" href="assets/css/main.css">
+</head>
+
+<body>
+<div class="page-wrap" id="root">
+	<div class="md-content">
+		<div class="hero md-skin-dark">
+			<div class="container">
+				<div class="hero__wrapper">
+					<div class="row">
+						<div class="col-lg-10 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-1 ">
+							<div class="hero__title_inner">
+								<span class="hero__icon">🤑</span>
+								<h1 class="hero__title">Колко лева останаха?</h1>
+								<p class="hero__text">
+									Бюлетин за нивото лева в обращение, в милиарди.
+								</p>
+								<p class="hero__text">
+									Актуализация: всеки петък или като ги пусне БНБ.
+								</p>
+								<p class="hero__text">
+									<em>Ако си Копейка - Рублата е сан-шанжмон завинаги!</em>
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="countdown__module">
+						<p id="killer" class="killer-countdown"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+<script>
+	// тука променяй
+	let current = 19767926000;
+	let lastWeek = 21186536000;
+	let lastUpdate = new Date("2025-12-30T10:00:00");
+	
+	// от тука надолу не барай!
+	const WEEK_SECONDS = 604800;
+	const killRatioSecond = Math.round((lastWeek - current) / WEEK_SECONDS);
+	
+	let el = document.getElementById('killer');
+	let siteInitial = 0;
+	
+	function updateTicker() {
+		const now = new Date();
+		const secondsPassed = Math.floor((now - lastUpdate) / 1000);
+		let liveCurrent = current - (secondsPassed * killRatioSecond);
+		
+		if (siteInitial === 0) {
+			siteInitial = liveCurrent;
+		}
+		
+		let youDestroyed = siteInitial - liveCurrent;
+		
+		if (liveCurrent <= 0) {
+			el.innerHTML = `МИСИЯТА ИЗПЪЛНЕНА! 🚀`;
+			el.style.color = "#00ff00"; // Зелено за успех
+			clearInterval(timer);
+			return;
+		}
+		
+		// Добавяме малко магия с класове за анимация
+		el.innerHTML = `
+            <div class="ticker-container">
+                <span class="killer-countdown-main">
+                    ${liveCurrent.toLocaleString('bg-BG')}
+                </span>
+                <span class="currency">лв.</span>
+                <br>
+                <div class="destruct-rate">🔥 Изгорени пред очите ти: <strong>${youDestroyed.toLocaleString('bg-BG')} лв.</strong></div>
+                <br>
+                <div class="destruct-rate">📉 Темп на изчезване: ${killRatioSecond.toLocaleString('bg-BG')} лв/сек.</div>
+            </div>
+        `;
+	}
+	
+	const timer = setInterval(updateTicker, 1000);
+	updateTicker();
+</script>
+</html>
